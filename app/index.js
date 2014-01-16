@@ -31,7 +31,7 @@ ValeStaticGenerator.prototype.askFor = function askFor() {
     }, {
         name: 'projectDescription',
         message: 'Qual a descrição do projeto?',
-        default: 'Página dinâmica - Vale.com'
+        default: 'Página estática - Vale.com'
     }, {
         name: 'projectAuthor',
         message: 'Qual o nome do desenvolvedor do projeto?',
@@ -58,6 +58,11 @@ ValeStaticGenerator.prototype.askFor = function askFor() {
         message: 'Escolha a versão que deseja usar jQuery?',
         choices: ['1.7.2', '1.8.2', '1.10.2']
     }, {
+        name: 'addFavicon',
+        type: 'confirm',
+        message: 'Deseja adicionar o favicon?',
+        default: false
+    }, {
         name: 'addHtml5shiv',
         type: 'confirm',
         message: 'Deseja adicionar o html5shiv?',
@@ -82,6 +87,7 @@ ValeStaticGenerator.prototype.askFor = function askFor() {
         this.projectLocalServerPort = props.projectLocalServerPort;
         this.useJquery = props.useJquery;
         this.jqueryVersion = props.jqueryVersion;
+        this.addFavicon = props.addFavicon;
         this.addHtml5shiv = props.addHtml5shiv;
         this.useBower = props.useBower;
         this.installProjectDependencies = props.installProjectDependencies;
@@ -90,6 +96,9 @@ ValeStaticGenerator.prototype.askFor = function askFor() {
 };
 
 ValeStaticGenerator.prototype.app = function app() {
+    // Dados
+    this.directory('db');
+
     // App Dev
     this.directory('dev');
 

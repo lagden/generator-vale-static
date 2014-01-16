@@ -1,6 +1,10 @@
 {
     "article": {
         "title": "Título",
-        "content": "Algumas coisas muito massa!!!"
+        "content": "Algumas coisas muito massa!!!",
+        "img": {
+            "file":"images/logo-vale.gif",
+            "caption":"Demais"
+        }
     }
 }

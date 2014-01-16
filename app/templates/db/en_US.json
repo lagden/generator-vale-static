@@ -1,6 +1,10 @@
 {
     "article": {
         "title": "Title",
-        "content": "Some stuff pretty cool!"
+        "content": "Some stuff pretty cool!",
+        "img": {
+            "file":"images/logo-vale.gif",
+            "caption":"Awesome"
+        }
     }
 }

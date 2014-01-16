@@ -4,6 +4,8 @@ var os = require('os'),
     exec = require('child_process').exec,
     appUseJquery = <%= useJquery %>,
     appAddHtml5shiv = <%= addHtml5shiv %>,
+    appAddFavicon = <%= addFavicon %>,
+    serverPort = <%= projectLocalServerPort %>,
     pathFinal = '<%= projectPath %>/<%= _.slugify(projectName) %>-1/';
 
 module.exports = function(grunt) {
@@ -21,19 +23,19 @@ module.exports = function(grunt) {
         serverData;
 
     dbFiles.forEach(function(el, idx, arr) {
-        var f = "db/" + el + ".json",
+        var f = 'db/' + el + '.json',
             j = grunt.file.readJSON(f);
         if (j !== null) {
-            jadeConfig[el] = buildJade(el, pathFinal, appUseJquery, appAddHtml5shiv, j, false);
+            jadeConfig[el] = buildJade(el, pathFinal, appUseJquery, appAddHtml5shiv, appAddFavicon, j, false);
             if (idx === 0) {
                 serverData = j;
             }
         } else {
-            grunt.fail.fatal("Problem with db: " + f + " not found");
+            grunt.fail.fatal('Problem with db: ' + f + ' not found');
         }
     });
 
-    jadeConfig.server = buildJade('server', '/', appUseJquery, appAddHtml5shiv, serverData, true);
+    jadeConfig.server = buildJade('server', '/', appUseJquery, appAddHtml5shiv, true, serverData, true);
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -61,6 +63,10 @@ module.exports = function(grunt) {
             }
         },
         jade: jadeConfig,
+        connect: {
+            dev: buildConnect(serverPort, '*', false, true, true, pathDevDoc),
+            build: buildConnect(serverPort, '*', true, false, false, pathBuildDoc)
+        },
         watch: {
             sass: {
                 files: ['sass/**/*.scss'],
@@ -84,30 +90,6 @@ module.exports = function(grunt) {
                 tasks: ['jade:server'],
                 options: {
                     interrupt: true
-                }
-            }
-        },
-        connect: {
-            dev: {
-                options: {
-                    port: <%= projectLocalServerPort %>,
-                    hostname: '*',
-                    keepalive: false,
-                    livereload: true,
-                    debug: true,
-                    base: pathDevDoc,
-                    open: 'http://localhost:<%= projectLocalServerPort %>/server.html'
-                }
-            },
-            build: {
-                options: {
-                    port: <%= projectLocalServerPort %>,
-                    hostname: '*',
-                    keepalive: true,
-                    livereload: false,
-                    debug: false,
-                    base: pathBuildDoc,
-                    open: 'http://localhost:<%= projectLocalServerPort %>/server.html'
                 }
             }
         }
@@ -136,21 +118,37 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['default', 'requirejs']);
 };
 
-function buildJade(el, pathFinal, appUseJquery, appAddHtml5shiv, j, d) {
-    return {
-        options: {
-            pretty: true,
-            data: {
-                path: pathFinal,
-                useJquery: appUseJquery,
-                addHtml5shiv: appAddHtml5shiv,
-                dados: j,
-                debug: d
+function buildJade(el, path, appUseJquery, appAddHtml5shiv, appAddFavicon, dados, debug) {
+    var o = {
+        'options': {
+            'pretty': true,
+            'data': {
+                'path': path || '/',
+                'useJquery': appUseJquery,
+                'addHtml5shiv': appAddHtml5shiv,
+                'addFavicon': appAddFavicon,
+                'dados': dados,
+                'debug': debug
             }
         },
-        files: {
-            "dev/Documents/app/<%= el %>.txt": ["jade/templates/body.jade"],
-            "dev/Documents/app/<%= el %>.html": ["jade/templates/index.jade"]
-        }
+        'files': {}
     };
+    o.files['dev/Documents/app/' + el + '.txt'] = ['jade/templates/body.jade'];
+    o.files['dev/Documents/app/' + el + '.html'] = ['jade/templates/index.jade'];
+    return o;
+}
+
+function buildConnect(port, hostname, keepalive, livereload, debug, base, open) {
+    var o = {
+        'options': {
+            'port': port || 9000,
+            'hostname': hostname || '*',
+            'keepalive': keepalive || false,
+            'livereload': livereload || false,
+            'debug': debug || false,
+            'base': base,
+            'open': open || 'http://localhost:' + port + '/server.html'
+        }
+    }
+    return o;
 }
