@@ -1,0 +1,25 @@
+#exemplo
+    article
+        h1.txt-color-gray.mar-b-20 #{dados.article.title}
+        p #{dados.article.content}
+
+script(src='#{path}js/helpers.js')
+
+if useJquery
+    script.
+        window.jQuery || document.write('<script src="#{path}js/lib.jquery.js"><\/script>');
+
+script.
+    var devDebug = #{debug};
+    window.pathFinal = "#{path}";
+
+if debug
+    script.
+        //- Somente para dev
+        //- Coloque os scripts dev dependencies
+        //- Exemplo:
+        //- Fancybox
+        //- loadCss('//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.1/jquery.fancybox.min.css');
+        //- loadScript('//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.1/jquery.fancybox.pack.min.js');
+
+script(src='#{path}js/lib.require.js', data-main="#{path}js/main")

@@ -1,0 +1,23 @@
+// Geral
+// -------------------------
+.caecilia{
+    @include sans-serif('CaeciliaLTStd-Bold');
+}
+
+.rounded{
+    @include border-radius($base-border-radius);
+    position: relative;
+}
+
+.link{}
+
+.link--unstyled{
+    @include unstyled-link;
+}
+
+.rule{
+    color: $gray;
+    border: none;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
