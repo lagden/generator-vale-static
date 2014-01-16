@@ -1,9 +1,11 @@
 {
   "name": "generator-vale-static",
-  "version": "0.0.0",
-  "description": "A generator for Yeoman",
+  "version": "0.0.1",
+  "description": "A generator for Yeoman - Vale.com",
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "vale",
+    "static"
   ],
   "homepage": "https://github.com/lagden/generator-vale-static",
   "bugs": "https://github.com/lagden/generator-vale-static/issues",
